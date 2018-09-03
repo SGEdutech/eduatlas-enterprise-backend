@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const PORT = require('./config')
+    .SERVER.PORT;
 
 const app = express();
 
