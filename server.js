@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const PORT = require('./config')
     .SERVER.PORT;
+require('../database/connection');
 
 const app = express();
 
