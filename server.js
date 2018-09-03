@@ -10,6 +10,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(5500, () => {
-	console.log(`Yo dawg! Server's at http://localhost:5500`);
+app.listen(PORT, () => {
+	console.log(`Yo dawg! Server's at http://localhost:${PORT}`);
 });
