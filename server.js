@@ -8,6 +8,9 @@ const {
 	passport,
 	session
 } = require('../database-and-auth/oauth/passport-and-session');
+const {
+	passwordHashMiddleware
+} = require('./scripts/hash-password');
 require('../database-and-auth/oauth/local');
 require('../database-and-auth/oauth/google');
 require('../database-and-auth/oauth/facebook');
@@ -31,6 +34,8 @@ app.use(express.json());
 app.use(express.urlencoded({
 	extended: true
 }));
+
+app.use(passwordHashMiddleware);
 
 app.use(session({
 	secret: keys.CookieKey,
