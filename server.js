@@ -25,7 +25,10 @@ const routes = {
 	issue: require('../database-and-auth/database/api/issue'),
 	auth: require('../database-and-auth/oauth/auth_routes'),
 	forgot: require('../database-and-auth/oauth/forgot'),
-	solution: require('../database-and-auth/database/api/solution')
+	solution: require('../database-and-auth/database/api/solution'),
+    promotedHome: require('../database-and-auth/database/api/promoted-home'),
+    promotedSearch: require('../database-and-auth/database/api/promoted-search'),
+    promotedRelated: require('../database-and-auth/database/api/promoted-related')
 };
 
 const app = express();
@@ -56,6 +59,9 @@ app.use('/user', routes.user);
 app.use('/auth', routes.auth);
 app.use('/forgot', routes.forgot);
 app.use('/slept-through-classs', routes.solution);
+app.use('/promoted-home', routes.promotedHome);
+app.use('/promoted-search', routes.promotedSearch);
+app.use('/promoted-related', routes.promotedRelated);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
