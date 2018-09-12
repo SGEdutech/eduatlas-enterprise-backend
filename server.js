@@ -30,7 +30,9 @@ const routes = {
     promotedSearch: require('../database-and-auth/database/api/promoted-search'),
     promotedRelated: require('../database-and-auth/database/api/promoted-related'),
     course: require('../database-and-auth/database/api/course'),
-    batch: require('../database-and-auth/database/api/batch')
+    batch: require('../database-and-auth/database/api/batch'),
+    forumPost: require('../database-and-auth/database/api/forum-post'),
+    forumComment: require('../database-and-auth/database/api/forum-comment')
 };
 
 const app = express();
@@ -66,6 +68,8 @@ app.use('/promoted-search', routes.promotedSearch);
 app.use('/promoted-related', routes.promotedRelated);
 app.use('/course', routes.course);
 app.use('/batch', routes.batch);
+app.use('/forum-post', routes.forumPost;
+app.use('/forum-comment', routes.forumComment);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
