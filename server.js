@@ -8,6 +8,7 @@ const {
 	passport,
 	session
 } = require('../database-and-auth/oauth/passport-and-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const {
 	passwordHashMiddleware
 } = require('./scripts/hash-password');
@@ -35,6 +36,15 @@ const routes = {
     forumComment: require('../database-and-auth/database/api/forum-comment')
 };
 
+const store = new MongoDBStore({
+    uri: 'mongodb://localhost:27017/tempDb',
+    collection: 'sessions'
+});
+
+store.on('connected', function() {
+    console.log('Connected');
+});
+
 const app = express();
 
 app.use(express.json());
@@ -49,7 +59,8 @@ app.use(session({
 	cookie: {
 		maxAge: 7 * 24 * 60 * 60 * 1000
 	},
-	maxAge: Date.now() + (7 * 86400 * 1000)
+	maxAge: Date.now() + (7 * 86400 * 1000),
+    store: store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -68,7 +79,7 @@ app.use('/promoted-search', routes.promotedSearch);
 app.use('/promoted-related', routes.promotedRelated);
 app.use('/course', routes.course);
 app.use('/batch', routes.batch);
-app.use('/forum-post', routes.forumPost;
+app.use('/forum-post', routes.forumPost);
 app.use('/forum-comment', routes.forumComment);
 
 app.use(express.static(path.join(__dirname, 'public')));
