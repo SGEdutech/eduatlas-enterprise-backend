@@ -57,9 +57,7 @@ const store = new MongoDBStore({
 	collection: 'sessions'
 });
 
-store.on('connected', function () {
-	console.log('Connected');
-});
+store.on('connected', () => console.log('Session has connected to the database'));
 
 store.on('error', function (error) {
 	assert.ifError(error);
