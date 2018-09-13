@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const assert = require('assert');
 const PORT = require('./config')
 	.SERVER.PORT;
 const keys = require('../database-and-auth/oauth/_config')
@@ -9,16 +10,18 @@ const {
 	session
 } = require('../database-and-auth/oauth/passport-and-session');
 const {
-    eventPicsMiddleware,
-    schoolPicsMiddleware,
-    tuitionPicsMiddleware,
-    userCoverPicMiddleware,
-    solutionPdfMiddleware
+	eventPicsMiddleware,
+	schoolPicsMiddleware,
+	tuitionPicsMiddleware,
+	userCoverPicMiddleware,
+	solutionPdfMiddleware
 } = require('../database-and-auth/storage-engine');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const {
 	passwordHashMiddleware
 } = require('./scripts/hash-password');
+const databaseURI = require('../database-and-auth/config.json').MONGO.URI;
+const cookieDomain = require('../database-and-auth/config.json').COOKIE.DOMAIN;
 require('../database-and-auth/oauth/local');
 require('../database-and-auth/oauth/google');
 require('../database-and-auth/oauth/facebook');
@@ -34,22 +37,27 @@ const routes = {
 	auth: require('../database-and-auth/oauth/auth_routes'),
 	forgot: require('../database-and-auth/oauth/forgot'),
 	solution: require('../database-and-auth/database/api/solution'),
-    promotedHome: require('../database-and-auth/database/api/promoted-home'),
-    promotedSearch: require('../database-and-auth/database/api/promoted-search'),
-    promotedRelated: require('../database-and-auth/database/api/promoted-related'),
-    course: require('../database-and-auth/database/api/course'),
-    batch: require('../database-and-auth/database/api/batch'),
-    forumPost: require('../database-and-auth/database/api/forum-post'),
-    forumComment: require('../database-and-auth/database/api/forum-comment')
+	promotedHome: require('../database-and-auth/database/api/promoted-home'),
+	promotedSearch: require('../database-and-auth/database/api/promoted-search'),
+	promotedRelated: require('../database-and-auth/database/api/promoted-related'),
+	course: require('../database-and-auth/database/api/course'),
+	batch: require('../database-and-auth/database/api/batch'),
+	forumPost: require('../database-and-auth/database/api/forum-post'),
+	forumComment: require('../database-and-auth/database/api/forum-comment')
 };
 
 const store = new MongoDBStore({
-    uri: 'mongodb://localhost:27017/tempDb',
-    collection: 'sessions'
+	uri: databaseURI,
+	collection: 'sessions'
 });
 
-store.on('connected', function() {
-    console.log('Connected');
+store.on('connected', function () {
+	console.log('Connected');
+});
+
+store.on('error', function (error) {
+	assert.ifError(error);
+	assert.ok(false);
 });
 
 const app = express();
@@ -65,10 +73,10 @@ app.use(session({
 	secret: keys.CookieKey,
 	cookie: {
 		maxAge: 7 * 24 * 60 * 60 * 1000,
-		domain: '.eduatlas.com'
+		domain: cookieDomain
 	},
 	maxAge: Date.now() + (7 * 86400 * 1000),
-    store: store
+	store: store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
