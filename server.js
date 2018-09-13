@@ -8,6 +8,13 @@ const {
 	passport,
 	session
 } = require('../database-and-auth/oauth/passport-and-session');
+const {
+    eventPicsMiddleware,
+    schoolPicsMiddleware,
+    tuitionPicsMiddleware,
+    userCoverPicMiddleware,
+    solutionPdfMiddleware
+} = require('../database-and-auth/storage-engine');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const {
 	passwordHashMiddleware
@@ -65,6 +72,12 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/event', eventPicsMiddleware);
+app.use('/school', schoolPicsMiddleware);
+app.use('/tuition', tuitionPicsMiddleware);
+app.use('/user', userCoverPicMiddleware);
+app.use('/slept-through-class', solutionPdfMiddleware);
 
 app.use('/blog', routes.blog);
 app.use('/event', routes.event);
