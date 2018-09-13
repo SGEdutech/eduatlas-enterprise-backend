@@ -19,6 +19,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const {
 	passwordHashMiddleware
 } = require('./scripts/hash-password');
+const {redirectUnknownHostMiddlewareEduatlasEnterprise} =
+	require('../database-and-auth/scripts/redirect-unknown-host-middleware');
 require('../database-and-auth/oauth/local');
 require('../database-and-auth/oauth/google');
 require('../database-and-auth/oauth/facebook');
@@ -48,18 +50,16 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
-store.on('connected', function() {
-    console.log('Connected');
-});
+store.on('connected', () => console.log('Sessions has connected to the database'));
 
 const app = express();
+
+app.use(redirectUnknownHostMiddlewareEduatlasEnterprise);
 
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: true
 }));
-
-app.use(passwordHashMiddleware);
 
 app.use(session({
 	secret: keys.CookieKey,
@@ -72,6 +72,8 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(passwordHashMiddleware);
 
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
