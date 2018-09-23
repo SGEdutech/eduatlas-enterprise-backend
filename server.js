@@ -16,18 +16,13 @@ const {
 	userCoverPicMiddleware,
 	solutionPdfMiddleware
 } = require('../database-and-auth/storage-engine');
+const { nestingMiddleware } = require('../database-and-auth/scripts/nesting');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const {
-	passwordHashMiddleware
-} = require('./scripts/hash-password');
-const {
-	redirectUnknownHostMiddlewareEduatlasEnterprise
-} =
+const { passwordHashMiddleware } = require('./scripts/hash-password');
+const { redirectUnknownHostMiddlewareEduatlasEnterprise } =
 require('../database-and-auth/scripts/redirect-unknown-host-middleware');
-const databaseURI = require('../database-and-auth/config.json')
-	.MONGO.URI;
-const cookieDomain = require('../database-and-auth/config.json')
-	.COOKIE.DOMAIN;
+const databaseURI = require('../database-and-auth/config.json').MONGO.URI;
+const cookieDomain = require('../database-and-auth/config.json').COOKIE.DOMAIN;
 require('../database-and-auth/oauth/local');
 require('../database-and-auth/oauth/google');
 require('../database-and-auth/oauth/facebook');
@@ -59,7 +54,7 @@ const store = new MongoDBStore({
 
 store.on('connected', () => console.log('Session has connected to the database'));
 
-store.on('error', function (error) {
+store.on('error', error => {
 	assert.ifError(error);
 	assert.ok(false);
 });
@@ -80,18 +75,20 @@ app.use(session({
 		domain: cookieDomain
 	},
 	maxAge: Date.now() + (7 * 86400 * 1000),
-	store: store
+	store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(passwordHashMiddleware);
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
 app.use('/tuition', tuitionPicsMiddleware);
 app.use('/user', userCoverPicMiddleware);
 app.use('/slept-through-class', solutionPdfMiddleware);
+
+app.use(nestingMiddleware, passwordHashMiddleware);
 
 app.use('/blog', routes.blog);
 app.use('/event', routes.event);
@@ -109,7 +106,5 @@ app.use('/course', routes.course);
 app.use('/batch', routes.batch);
 app.use('/forum-post', routes.forumPost);
 app.use('/forum-comment', routes.forumComment);
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => console.log(`Yo dawg! Server's at http://localhost:${PORT}`));
