@@ -62,6 +62,8 @@ const app = express();
 
 app.use(redirectUnknownHostMiddlewareEduatlasEnterprise);
 
+app.use('/images', express.static(path.join(process.cwd(), 'images')));
+
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: true
