@@ -16,6 +16,7 @@ const {
 	userCoverPicMiddleware,
 	solutionPdfMiddleware,
 	notificationMiddleware
+	resourcesMiddleware
 } = require('../database-and-auth/storage-engine');
 const { nestingMiddleware } = require('../database-and-auth/scripts/nesting');
 const MongoDBStore = require('connect-mongodb-session')(session);
@@ -86,6 +87,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
 app.use('/tuition', tuitionPicsMiddleware);
+app.use('/tuition/resources', resourcesMiddleware);
 app.use('/user', userCoverPicMiddleware);
 app.use('/slept-through-class', solutionPdfMiddleware);
 app.use('/notification', notificationMiddleware)
