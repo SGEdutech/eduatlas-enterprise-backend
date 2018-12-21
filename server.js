@@ -1,10 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const assert = require('assert');
-const PORT = require('./config')
-	.SERVER.PORT;
-const keys = require('../database-and-auth/oauth/_config')
-	.keys;
+const PORT = require('./config').SERVER.PORT;
+const keys = require('../database-and-auth/oauth/_config').keys;
 const {
 	passport,
 	session
@@ -15,7 +14,7 @@ const {
 	tuitionPicsMiddleware,
 	userCoverPicMiddleware,
 	solutionPdfMiddleware,
-	notificationMiddleware
+	notificationMiddleware,
 	resourcesMiddleware
 } = require('../database-and-auth/storage-engine');
 const { nestingMiddleware } = require('../database-and-auth/scripts/nesting');
@@ -63,6 +62,8 @@ const app = express();
 
 app.use(redirectUnknownHostMiddlewareEduatlasEnterprise);
 
+app.use(cors());
+
 app.use('/images', express.static(path.join(process.cwd(), 'images')));
 
 app.use(express.json());
@@ -86,8 +87,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
-app.use('/tuition', tuitionPicsMiddleware);
-app.use('/tuition/resources', resourcesMiddleware);
+app.use('/tuition/new', tuitionPicsMiddleware);
+app.use('/tuition/resource', resourcesMiddleware);
 app.use('/user', userCoverPicMiddleware);
 app.use('/slept-through-class', solutionPdfMiddleware);
 app.use('/notification', notificationMiddleware)
