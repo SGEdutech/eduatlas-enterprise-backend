@@ -88,7 +88,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
 app.use('/tuition/new', tuitionPicsMiddleware);
-app.use('/tuition/resource', resourcesMiddleware);
+app.use('/tuition/*/resource', resourcesMiddleware);
 app.use('/user', userCoverPicMiddleware);
 app.use('/slept-through-class', solutionPdfMiddleware);
 app.use('/notification', notificationMiddleware)
