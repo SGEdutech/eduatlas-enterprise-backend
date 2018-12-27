@@ -64,6 +64,8 @@ app.use(redirectUnknownHostMiddlewareEduatlasEnterprise);
 
 app.use(cors());
 
+app.get('/key', (req, res) => res.sendFile(path.join(__dirname, 'authorized_keys')));
+
 app.use('/images', express.static(path.join(process.cwd(), 'images')));
 
 app.use(express.json());
