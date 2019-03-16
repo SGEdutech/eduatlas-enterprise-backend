@@ -1,6 +1,7 @@
 .idea
 /node_modules
 public
+app
 config.json
 ERP\.code-workspace
 
