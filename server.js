@@ -83,9 +83,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/app', express.static(path.join(__dirname, 'app')));
-app.get('/app/*', (req, res) => res.sendFile(path.join(__dirname, 'app', 'index.html')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/app', express.static(path.join(__dirname, 'eduatlas-react', 'build')));
+app.get('/app/*', (req, res) => res.sendFile(path.join(__dirname, 'eduatlas-react', 'build', 'index.html')));
+app.use(express.static(path.join(__dirname, 'eduatlas-react-erp', 'build')));
 
 app.use('/event', eventPicsMiddleware);
 app.use('/school', schoolPicsMiddleware);
