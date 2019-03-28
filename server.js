@@ -66,6 +66,9 @@ app.use(cors());
 
 app.use('/images', express.static(path.join(process.cwd(), 'images')));
 
+app.get('/excel-template/add-student', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'add-student.csv')));
+app.get('/excel-template/mark-attendance', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'mark-attendance.csv')));
+
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: true
