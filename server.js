@@ -70,8 +70,9 @@ app.get('/excel-template/add-score', (req, res) => res.sendFile(path.join(__dirn
 app.get('/excel-template/add-student', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'add-student.csv')));
 app.get('/excel-template/mark-attendance', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'mark-attendance.csv')));
 
-app.use(express.json());
+app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({
+	limit: '100mb',
 	extended: true
 }));
 
