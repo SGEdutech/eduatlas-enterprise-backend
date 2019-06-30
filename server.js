@@ -21,7 +21,7 @@ const { nestingMiddleware } = require('../database-and-auth/scripts/nesting');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const { passwordHashMiddleware } = require('./scripts/hash-password');
 const { redirectUnknownHostMiddlewareEduatlasEnterprise } =
-require('../database-and-auth/scripts/redirect-unknown-host-middleware');
+	require('../database-and-auth/scripts/redirect-unknown-host-middleware');
 const databaseURI = require('../database-and-auth/config.json').MONGO.URI;
 const cookieDomain = require('../database-and-auth/config.json').COOKIE.DOMAIN;
 require('../database-and-auth/oauth/local');
@@ -62,13 +62,20 @@ const app = express();
 
 app.use(redirectUnknownHostMiddlewareEduatlasEnterprise);
 
-app.use(cors());
+const corsOptions = {
+	origin: (origin, cb) => cb(null, true),
+	exposedHeaders: true,
+	credentials: true
+};
+
+app.use(cors(corsOptions));
 
 app.use('/images', express.static(path.join(process.cwd(), 'images')));
 
 app.get('/excel-template/add-score', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'add-score.csv')));
 app.get('/excel-template/add-student', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'add-student.csv')));
 app.get('/excel-template/mark-attendance', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'mark-attendance.csv')));
+app.get('/excel-template/add-lead', (req, res) => res.sendFile(path.join(__dirname, 'excel-templates', 'add-lead.csv')));
 
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({
